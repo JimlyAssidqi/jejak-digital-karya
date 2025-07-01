@@ -1,9 +1,12 @@
-
 import Navigation from "@/components/Navigation";
-import { Calendar, Edit, Plus, Trash2, User } from "lucide-react";
+import { Calendar, Edit, Plus, Trash2, User, ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const Blog = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedPostId = searchParams.get('post');
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -15,7 +18,7 @@ const Blog = () => {
       id: 1,
       title: "Memulai Karir sebagai Web Developer di 2024",
       excerpt: "Tips dan panduan lengkap untuk memulai karir sebagai web developer di era modern dengan teknologi terkini.",
-      content: "Dalam artikel ini, saya akan berbagi pengalaman dan tips untuk memulai karir sebagai web developer...",
+      content: "Dalam artikel ini, saya akan berbagi pengalaman dan tips untuk memulai karir sebagai web developer di tahun 2024.\n\nDunia web development terus berkembang pesat. Teknologi-teknologi baru bermunculan setiap tahunnya, mulai dari framework JavaScript seperti React, Vue, dan Angular, hingga teknologi backend seperti Node.js, Python, dan Go.\n\nBerikut adalah beberapa langkah yang dapat Anda ikuti:\n\n1. **Pelajari HTML, CSS, dan JavaScript** - Ini adalah fondasi dari semua web development. Tanpa menguasai ketiga teknologi ini, akan sulit untuk melangkah ke tahap selanjutnya.\n\n2. **Pilih Framework atau Library** - Setelah menguasai dasar-dasar, pilih satu framework untuk dipelajari secara mendalam. React adalah pilihan yang populer saat ini.\n\n3. **Buat Portfolio** - Kumpulkan proyek-proyek yang telah Anda buat dalam sebuah portfolio. Ini akan menjadi bukti kemampuan Anda kepada calon employer.\n\n4. **Networking** - Bergabunglah dengan komunitas developer, baik online maupun offline. LinkedIn, GitHub, dan Discord adalah platform yang bagus untuk memulai.\n\n5. **Terus Belajar** - Teknologi web terus berkembang, jadi pastikan Anda selalu update dengan perkembangan terbaru.\n\nIngat, menjadi web developer yang sukses membutuhkan waktu dan dedikasi. Jangan menyerah ketika menghadapi tantangan, karena setiap developer pernah merasakan hal yang sama.",
       author: "Admin",
       date: "15 Januari 2024",
       readTime: "5 menit"
@@ -24,7 +27,7 @@ const Blog = () => {
       id: 2,
       title: "React vs Vue: Mana yang Lebih Baik?",
       excerpt: "Perbandingan mendalam antara React dan Vue.js untuk membantu Anda memilih framework yang tepat.",
-      content: "Kedua framework ini memiliki kelebihan masing-masing. Mari kita bahas secara detail...",
+      content: "Kedua framework ini memiliki kelebihan masing-masing. Mari kita bahas secara detail perbandingan antara React dan Vue.js.\n\n## React\n\nReact adalah library JavaScript yang dikembangkan oleh Facebook. Beberapa keunggulan React:\n\n- **Ekosistem yang Luas**: React memiliki komunitas yang sangat besar dan banyak library pendukung\n- **Job Market**: Banyak perusahaan yang menggunakan React, sehingga peluang kerja lebih besar\n- **Fleksibilitas**: React memberikan kebebasan dalam memilih arsitektur aplikasi\n- **Performance**: Virtual DOM membuat React sangat cepat\n\n## Vue.js\n\nVue.js adalah framework progressive yang dikembangkan oleh Evan You. Keunggulan Vue:\n\n- **Learning Curve**: Vue lebih mudah dipelajari, terutama untuk pemula\n- **Template Syntax**: Sintaks template Vue mirip dengan HTML biasa\n- **Size**: Bundle size Vue lebih kecil dibanding React\n- **Documentation**: Dokumentasi Vue sangat lengkap dan mudah dipahami\n\n## Kesimpulan\n\nPilihan antara React dan Vue tergantung pada kebutuhan proyek dan preferensi personal. Jika Anda baru memulai, Vue mungkin lebih cocok. Namun jika Anda ingin fokus pada job market, React adalah pilihan yang lebih aman.",
       author: "Admin",
       date: "10 Januari 2024",
       readTime: "8 menit"
@@ -33,12 +36,22 @@ const Blog = () => {
       id: 3,
       title: "Optimasi Performa Website: Best Practices",
       excerpt: "Teknik-teknik terbaik untuk meningkatkan kecepatan dan performa website Anda.",
-      content: "Performa website yang baik sangat penting untuk user experience dan SEO...",
+      content: "Performa website yang baik sangat penting untuk user experience dan SEO. Berikut adalah teknik-teknik yang dapat Anda terapkan:\n\n## 1. Optimasi Gambar\n\n- Gunakan format gambar yang tepat (WebP untuk web modern)\n- Kompres gambar tanpa mengurangi kualitas secara signifikan\n- Implementasikan lazy loading untuk gambar\n- Gunakan responsive images dengan srcset\n\n## 2. Minifikasi dan Kompresi\n\n- Minifikasi CSS, JavaScript, dan HTML\n- Gunakan Gzip atau Brotli compression\n- Hapus kode yang tidak terpakai (dead code elimination)\n\n## 3. Caching Strategy\n\n- Implementasikan browser caching dengan HTTP headers yang tepat\n- Gunakan CDN untuk menyajikan static assets\n- Implementasikan service worker untuk offline caching\n\n## 4. Critical Rendering Path\n\n- Inline critical CSS\n- Defer non-critical JavaScript\n- Prioritaskan loading resource yang penting\n\n## 5. Database Optimization\n\n- Gunakan indexing yang tepat\n- Optimasi query database\n- Implementasikan connection pooling\n\n## Tools untuk Monitoring\n\n- Google PageSpeed Insights\n- GTmetrix\n- WebPageTest\n- Lighthouse (built-in di Chrome DevTools)\n\nDengan menerapkan teknik-teknik ini, website Anda akan memiliki performa yang jauh lebih baik dan memberikan pengalaman yang optimal bagi pengguna.",
       author: "Admin",
       date: "5 Januari 2024",
       readTime: "6 menit"
     }
   ]);
+
+  const selectedPost = selectedPostId ? blogPosts.find(post => post.id === parseInt(selectedPostId)) : null;
+
+  const handleReadMore = (postId: number) => {
+    setSearchParams({ post: postId.toString() });
+  };
+
+  const handleBackToList = () => {
+    setSearchParams({});
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,6 +100,81 @@ const Blog = () => {
       alert("Post berhasil dihapus!");
     }
   };
+
+  // If viewing a specific post, show the detailed view
+  if (selectedPost) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <Navigation />
+        
+        <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          <button
+            onClick={handleBackToList}
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-8 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Kembali ke Blog
+          </button>
+
+          <article className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="p-8">
+              <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
+                <div className="flex items-center gap-1">
+                  <User className="w-4 h-4" />
+                  <span>{selectedPost.author}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  <span>{selectedPost.date}</span>
+                </div>
+                <span>{selectedPost.readTime} baca</span>
+              </div>
+              
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                {selectedPost.title}
+              </h1>
+              
+              <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                {selectedPost.content.split('\n').map((paragraph, index) => {
+                  if (paragraph.trim() === '') return <br key={index} />;
+                  if (paragraph.startsWith('##')) {
+                    return <h2 key={index} className="text-2xl font-bold text-gray-900 mt-8 mb-4">{paragraph.replace('## ', '')}</h2>;
+                  }
+                  if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+                    return <h3 key={index} className="text-xl font-semibold text-gray-800 mt-6 mb-3">{paragraph.replace(/\*\*/g, '')}</h3>;
+                  }
+                  if (paragraph.startsWith('- ')) {
+                    return <li key={index} className="ml-6 mb-2">{paragraph.replace('- ', '')}</li>;
+                  }
+                  if (/^\d+\./.test(paragraph)) {
+                    return <li key={index} className="ml-6 mb-2 list-decimal">{paragraph.replace(/^\d+\.\s/, '')}</li>;
+                  }
+                  return <p key={index} className="mb-4">{paragraph}</p>;
+                })}
+              </div>
+
+              {isLoggedIn && (
+                <div className="flex gap-2 mt-8 pt-6 border-t border-gray-200">
+                  <button className="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50 transition-colors">
+                    <Edit className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDeletePost(selectedPost.id);
+                      handleBackToList();
+                    }}
+                    className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </article>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -280,7 +368,10 @@ const Blog = () => {
                 </p>
                 
                 <div className="flex justify-between items-center">
-                  <button className="text-blue-600 hover:text-blue-800 font-medium">
+                  <button 
+                    onClick={() => handleReadMore(post.id)}
+                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                  >
                     Baca Selengkapnya →
                   </button>
                   
